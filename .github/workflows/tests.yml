@@ -21,4 +21,4 @@ jobs:
 
       - name: Run Tests
         # Executes the compiled tests. If this succeeds, you get the green checkmark!
-        run: cd build && ctest --output-on-failure
+        run: cd build && ./runTests
