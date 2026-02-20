@@ -1,0 +1,24 @@
+name: C++ Unit Tests
+
+# This triggers the action whenever you push to the repo
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # A clean Linux environment
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure CMake
+        # Looks for your CMakeLists.txt and prepares the build
+        run: cmake -S . -B build
+
+      - name: Build Tests
+        # Compiles the code and downloads Google Test
+        run: cmake --build build
+
+      - name: Run Tests
+        # Executes the compiled tests. If this succeeds, you get the green checkmark!
+        run: cd build && ctest --output-on-failure

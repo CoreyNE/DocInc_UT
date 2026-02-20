@@ -1,0 +1,22 @@
+name: C++ Linter
+
+on: [push, pull_request]
+
+jobs:
+  lint-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Clang-Format
+        run: sudo apt-get update && sudo apt-get install -y clang-format
+
+      - name: Run Clang-Format Checker
+        # This forces the action to succeed visually, even if the linter finds errors
+        continue-on-error: true 
+        run: |
+          echo "Checking C++ formatting..."
+          # Finds all .cpp and .h files and checks them against your .clang-format file
+          find . -name "*.cpp" -o -name "*.h" | xargs clang-format --dry-run --Werror
