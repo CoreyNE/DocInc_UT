@@ -58,4 +58,26 @@ TEST_F(SessionManagerTest, LoginTriggers2FAGenerationOnSuccess) {
         .WillOnce(Return(true));
 
     EXPECT_CALL(mockTFA, generateCode("JohnDoe"))
-        .
+        .Times(1);
+
+    LoginState result = session->login("JohnDoe", "goodpass");
+    EXPECT_EQ(result, LoginState::PENDING_2FA);
+}
+
+// Test 3: STUB for Successful 2FA Verification
+TEST_F(SessionManagerTest, Verify2FASucceedsWithValidCode) {
+    EXPECT_CALL(mockTFA, validateCode("JohnDoe", "123456"))
+        .WillOnce(Return(true));
+
+    LoginState result = session->verify2FA("JohnDoe", "123456");
+    EXPECT_EQ(result, LoginState::SUCCESS);
+}
+
+// Test 4: STUB for Failed 2FA Verification
+TEST_F(SessionManagerTest, Verify2FAFailsWithInvalidCode) {
+    EXPECT_CALL(mockTFA, validateCode("JohnDoe", "000000"))
+        .WillOnce(Return(false));
+
+    LoginState result = session->verify2FA("JohnDoe", "000000");
+    EXPECT_EQ(result, LoginState::FAILURE);
+}
